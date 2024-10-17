@@ -36,28 +36,28 @@ def calculate_period(lcg):
         print(count)
     return count
 
-period = calculate_period(lcg)
-print(f"Длина периода: {period}")
+# period = calculate_period(lcg)
+# print(f"Длина периода: {period}")
 
 def evaluate_distribution(lcg, num_samples, end_title):
     samples = [lcg() for _ in range(num_samples)]
     plt.hist(samples, bins=100, density=True)
-    plt.title('Распределение псевдослучайных чисел', end_title)
+    plt.title('Распределение псевдослучайных чисел '+ end_title)
     plt.show()
 
 evaluate_distribution(lambda: lcg.next(), 100000, 'lcg')
-evaluate_distribution(lambda: random()*100000000000000000, 100000, 'random')
+evaluate_distribution(lambda: random()*2**32, 100000, 'random')
 
 def evaluate_autocorrelation(lcg, num_samples, end_title):
     samples = np.array([lcg() for _ in range(num_samples)])
     autocorr = np.correlate(samples - np.mean(samples), samples - np.mean(samples), mode='full')
     autocorr = autocorr[autocorr.size // 2:]
-    plt.plot(autocorr[:100])  # Корреляция на первых 100 лагах
+    plt.plot(autocorr[1:100])  # Корреляция на первых 100 лагах
     plt.title('Автокорреляционная функция '+ end_title)
     plt.show()
 
 evaluate_autocorrelation(lambda: lcg.next(), 100000, 'lcg')
-evaluate_autocorrelation(lambda: random()*100000000000000000, 100000, 'random')
+evaluate_autocorrelation(lambda: random()*2**32, 100000, 'random')
 
 def evaluate_speed(lcg, num_samples, end_title):
     start_time = time.time()
